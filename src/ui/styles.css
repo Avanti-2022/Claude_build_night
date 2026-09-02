@@ -1,15 +1,19 @@
 :root {
-  --bg: #f6f7f8;
+  --bg: #f7f6f3;
   --surface: #ffffff;
-  --border: #e1e3e6;
-  --text-primary: #202124;
-  --text-secondary: #5f6368;
-  --text-muted: #9aa0a6;
-  --accent: #1a73e8;
-  --accent-dark: #1558b0;
-  --accent-soft: #e8f0fe;
-  --highlight: #f9a825;
-  --highlight-soft: rgba(249, 168, 37, 0.12);
+  --border: #e6e4df;
+  --border-strong: #d8d5cf;
+  --text-primary: #26251f;
+  --text-secondary: #6b6a63;
+  --text-muted: #9c9a92;
+  --accent: #4a7fb5;
+  --accent-dark: #375f8a;
+  --accent-soft: #e9eff5;
+  --balance-fill: #7fa0bf;
+  --highlight: #c98a3a;
+  --highlight-soft: rgba(201, 138, 58, 0.12);
+  --shadow-sm: 0 1px 2px rgba(38, 37, 31, 0.05);
+  --shadow-md: 0 2px 8px rgba(38, 37, 31, 0.05);
 }
 
 * {
@@ -23,28 +27,43 @@ body {
   color: var(--text-primary);
 }
 
+button,
+input {
+  font-family: inherit;
+}
+
 .app-layout {
   display: flex;
   min-height: 100vh;
 }
 
-/* Sidebar */
+/* Shared panel heading (mirrors "Compass" title's weight/size for rhythm) */
 
-.compass-sidebar {
-  width: 300px;
+.panel-heading {
+  margin: 0 0 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+/* Compass reflection rail */
+
+.compass-rail {
+  width: 320px;
   flex-shrink: 0;
-  padding: 28px 24px;
+  padding: 32px;
   background: var(--surface);
-  border-right: 1px solid var(--border);
+  border-left: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 36px;
 }
 
 .compass-header h1 {
   margin: 0;
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 
@@ -52,23 +71,74 @@ body {
   margin: 6px 0 0;
   font-size: 0.85rem;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .compass-setup,
 .compass-review {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
 }
 
 .field-label {
-  margin: 0 0 8px;
+  margin: 0 0 12px;
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   color: var(--text-muted);
+}
+
+/* Weekly balance */
+
+.weekly-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.balance-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.balance-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.balance-label {
+  width: 52px;
+  flex-shrink: 0;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.balance-track {
+  flex: 1;
+  height: 7px;
+  border-radius: 4px;
+  background: #eeece5;
+  overflow: hidden;
+}
+
+.balance-fill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--balance-fill);
+}
+
+.balance-note {
+  margin: 10px 0 0;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
 /* Boundaries */
@@ -88,12 +158,13 @@ body {
 }
 
 .boundary-field input {
-  padding: 8px 10px;
+  padding: 9px 10px;
   border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 0.85rem;
   color: var(--text-primary);
   background: var(--surface);
+  transition: border-color 150ms ease;
 }
 
 .boundary-field input:focus {
@@ -109,13 +180,14 @@ body {
 }
 
 .priority-field {
-  padding: 9px 10px;
+  padding: 10px 11px;
   margin-bottom: 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 0.85rem;
   color: var(--text-primary);
   background: var(--surface);
+  transition: border-color 150ms ease;
 }
 
 .priority-field:last-child {
@@ -127,20 +199,20 @@ body {
   border-color: var(--accent);
 }
 
-/* Run Compass button */
+/* Run Compass button - the one solid, filled control in the rail */
 
 .run-compass-button {
   padding: 14px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.35);
+  box-shadow: var(--shadow-sm);
+  transition: background-color 150ms ease;
 }
 
 .run-compass-button:hover {
@@ -157,18 +229,23 @@ body {
   color: var(--accent);
   font-size: 0.8rem;
   cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.back-link:hover {
+  color: var(--accent-dark);
 }
 
 .review-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .review-card {
-  padding: 14px;
+  padding: 20px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--surface);
 }
 
@@ -176,68 +253,76 @@ body {
   opacity: 0.55;
 }
 
-.review-card h3 {
-  margin: 0 0 6px;
-  font-size: 0.9rem;
+.review-card-category {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
 }
 
-.review-card p {
+.review-card-title {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.review-card-message {
   margin: 0;
   font-size: 0.8rem;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .review-card-status {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--text-muted);
 }
 
 .review-card-actions {
   display: flex;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 20px;
+  margin-top: 16px;
 }
 
-.review-action {
-  flex: 1;
-  padding: 7px 0;
-  font-size: 0.75rem;
+.review-action-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.78rem;
   font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  background: var(--surface);
   color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 150ms ease;
 }
 
-.review-action.primary {
-  border-color: var(--accent);
+.review-action-link:hover {
+  color: var(--text-primary);
+}
+
+.review-action-link.primary {
   color: var(--accent);
 }
 
-.review-action.primary.active {
-  background: var(--accent);
-  color: #fff;
+.review-action-link.primary:hover,
+.review-action-link.primary.active {
+  color: var(--accent-dark);
 }
 
-.review-action:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Alternatives */
+/* Alternatives - kept visually secondary to the main card actions */
 
 .alternatives-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 14px;
-  padding-top: 14px;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
   border-top: 1px solid var(--border);
 }
 
@@ -245,62 +330,83 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: #fafbfc;
+  padding-left: 12px;
+  border-left: 2px solid var(--border);
 }
 
 .alternative-item--previewing {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  border-left-color: var(--accent);
 }
 
 .alternative-info h4 {
-  margin: 0 0 4px;
-  font-size: 0.8rem;
+  margin: 0 0 2px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .alternative-info p {
   margin: 0;
   font-size: 0.72rem;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
-.alternative-item > .review-action {
-  flex: none;
-  width: 100%;
-}
-
-.alternative-preview-actions {
+.alternative-actions {
   display: flex;
   gap: 8px;
+}
+
+.pill-button {
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+.pill-button:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.pill-button.primary {
+  background: var(--accent-soft);
+  border-color: transparent;
+  color: var(--accent-dark);
+}
+
+.pill-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* Main content / calendar */
 
 .main-content {
   flex: 1;
-  padding: 28px;
+  padding: 32px;
   overflow: auto;
 }
 
 .weekly-calendar {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 24px;
   max-width: 1100px;
-}
-
-.weekly-calendar h2 {
-  margin: 0 0 16px;
-  font-size: 1.1rem;
+  box-shadow: var(--shadow-md);
 }
 
 .calendar-header-row {
   display: flex;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .calendar-header-spacer {
@@ -321,7 +427,6 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-secondary);
-  padding-bottom: 8px;
 }
 
 .calendar-body {
@@ -336,9 +441,9 @@ body {
 
 .time-label {
   position: absolute;
-  right: 8px;
+  right: 10px;
   transform: translateY(-50%);
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
 }
 
@@ -361,19 +466,19 @@ body {
   left: 0;
   right: 0;
   height: 0;
-  border-top: 1px solid #eef0f2;
+  border-top: 1px solid #f1efea;
 }
 
 .calendar-event {
   position: absolute;
-  left: 3px;
-  right: 3px;
+  left: 4px;
+  right: 4px;
   background: var(--accent-soft);
   border-left: 3px solid var(--accent);
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 0.7rem;
-  line-height: 1.3;
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 0.72rem;
+  line-height: 1.35;
   color: var(--text-primary);
   overflow: hidden;
   white-space: nowrap;
@@ -391,5 +496,34 @@ body {
   background: var(--highlight-soft);
   border: 1.5px dashed var(--highlight);
   border-left: 1.5px dashed var(--highlight);
-  color: #8a6100;
+  color: #8a6524;
+}
+
+/* Responsive: below ~1100px there isn't room for a comfortable calendar
+   grid next to a fixed-width rail, so stack the rail below the calendar
+   instead of squeezing either one. */
+
+@media (max-width: 1100px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .compass-rail {
+    width: 100%;
+    max-width: 640px;
+    align-self: center;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 640px) {
+  .main-content,
+  .compass-rail {
+    padding: 24px 20px;
+  }
+
+  .weekly-calendar {
+    padding: 16px;
+  }
 }

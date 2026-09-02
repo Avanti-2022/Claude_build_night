@@ -3,6 +3,7 @@ import PrioritiesInput from '../inputs/PrioritiesInput'
 import BoundariesInput from '../inputs/BoundariesInput'
 import RunCompassButton from '../RunCompassButton'
 import ReviewCard from '../review/ReviewCard'
+import WeeklyBalance from '../balance/WeeklyBalance'
 import { OBSERVATIONS } from '../../mockData'
 import type { CalendarEvent, ReviewStatus } from '../../types'
 
@@ -78,11 +79,13 @@ export default function CompassSidebar({ onPreview, onCancelPreview, onApply }: 
   }
 
   return (
-    <aside className="compass-sidebar">
+    <aside className="compass-rail">
       <div className="compass-header">
         <h1>Compass</h1>
-        <p className="compass-subtitle">Review your week before you commit to it.</p>
+        <p className="compass-subtitle">A second look at the week you planned.</p>
       </div>
+
+      <WeeklyBalance />
 
       {!hasRun ? (
         <div className="compass-setup">
@@ -95,6 +98,7 @@ export default function CompassSidebar({ onPreview, onCancelPreview, onApply }: 
           <button type="button" className="back-link" onClick={handleBackToSetup}>
             ← Back to setup
           </button>
+          <h2 className="field-label">Observations</h2>
           <div className="review-list">
             {OBSERVATIONS.map((observation) => (
               <ReviewCard

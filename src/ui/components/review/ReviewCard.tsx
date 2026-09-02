@@ -32,19 +32,20 @@ export default function ReviewCard({
 
   return (
     <div className={`review-card${isMuted ? ' review-card--muted' : ''}`}>
-      <h3>{observation.title}</h3>
-      <p>{observation.message}</p>
+      <span className="review-card-category">{observation.category}</span>
+      <h3 className="review-card-title">{observation.title}</h3>
+      <p className="review-card-message">{observation.message}</p>
 
       {label ? (
         <p className="review-card-status">{label}</p>
       ) : (
         <div className="review-card-actions">
-          <button type="button" className="review-action secondary" onClick={onKeepAsIs}>
+          <button type="button" className="review-action-link" onClick={onKeepAsIs}>
             Keep as is
           </button>
           <button
             type="button"
-            className={`review-action primary${status === 'exploring' ? ' active' : ''}`}
+            className={`review-action-link primary${status === 'exploring' ? ' active' : ''}`}
             onClick={onToggleExplore}
           >
             {status === 'exploring' ? 'Close' : 'Explore'}
@@ -68,27 +69,25 @@ export default function ReviewCard({
                   <p>{alternative.tradeoff}</p>
                 </div>
                 {isPreviewing ? (
-                  <div className="alternative-preview-actions">
-                    <button
-                      type="button"
-                      className="review-action primary"
-                      onClick={() => onApply(alternative.id)}
-                    >
+                  <div className="alternative-actions">
+                    <button type="button" className="pill-button primary" onClick={() => onApply(alternative.id)}>
                       Apply change
                     </button>
-                    <button type="button" className="review-action secondary" onClick={onCancelPreview}>
+                    <button type="button" className="pill-button" onClick={onCancelPreview}>
                       Cancel preview
                     </button>
                   </div>
                 ) : (
-                  <button
-                    type="button"
-                    className="review-action secondary"
-                    disabled={disablePreview}
-                    onClick={() => onPreview(alternative.id)}
-                  >
-                    Preview
-                  </button>
+                  <div className="alternative-actions">
+                    <button
+                      type="button"
+                      className="pill-button"
+                      disabled={disablePreview}
+                      onClick={() => onPreview(alternative.id)}
+                    >
+                      Preview
+                    </button>
+                  </div>
                 )}
               </div>
             )

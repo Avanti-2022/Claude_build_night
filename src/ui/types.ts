@@ -17,6 +17,7 @@ export type Alternative = {
 
 export type Observation = {
   id: string
+  category: string
   title: string
   message: string
   alternatives: Alternative[]

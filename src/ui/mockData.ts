@@ -42,6 +42,7 @@ export const INITIAL_EVENTS: CalendarEvent[] = [
 export const OBSERVATIONS: Observation[] = [
   {
     id: 'tuesday-overloaded',
+    category: 'Workload',
     title: 'Tuesday looks overloaded',
     message: 'You have several long work/study blocks with little breathing room.',
     alternatives: [
@@ -79,6 +80,7 @@ export const OBSERVATIONS: Observation[] = [
   },
   {
     id: 'health-underrepresented',
+    category: 'Health',
     title: 'Health is underrepresented',
     message: 'Exercise is one of your priorities, but there is no dedicated time for it this week.',
     alternatives: [
@@ -117,6 +119,7 @@ export const OBSERVATIONS: Observation[] = [
   },
   {
     id: 'thursday-runs-late',
+    category: 'Sleep',
     title: 'Thursday runs late',
     message: 'Your final commitment ends close to your preferred sleep time.',
     alternatives: [

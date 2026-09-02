@@ -17,6 +17,9 @@ export default function App() {
 
   return (
     <div className="app-layout">
+      <main className="main-content">
+        <WeeklyCalendar events={events} highlightIds={preview.highlightIds} ghostEvents={preview.ghostEvents} />
+      </main>
       <CompassSidebar
         onPreview={(highlightIds, ghostEvents) => setPreview({ highlightIds, ghostEvents })}
         onCancelPreview={() => setPreview(emptyPreview)}
@@ -25,9 +28,6 @@ export default function App() {
           setPreview(emptyPreview)
         }}
       />
-      <main className="main-content">
-        <WeeklyCalendar events={events} highlightIds={preview.highlightIds} ghostEvents={preview.ghostEvents} />
-      </main>
     </div>
   )
 }

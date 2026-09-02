@@ -1,0 +1,16 @@
+{
+  "name": "claude-build-night",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Compass intelligence MVP",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test \"tests/**/*.test.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  }
+}

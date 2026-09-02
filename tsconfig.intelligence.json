@@ -11,6 +11,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/intelligence/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/intelligence/**/*.ts", "src/server/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", "dist", "dist-intelligence"]
 }

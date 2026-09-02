@@ -29,6 +29,7 @@ export default function ReviewCard({
 }: ReviewCardProps) {
   const isMuted = status === 'kept' || status === 'resolved'
   const label = statusLabel(status)
+  const canExplore = observation.alternatives.length > 0
 
   return (
     <div className={`review-card${isMuted ? ' review-card--muted' : ''}`}>
@@ -43,17 +44,19 @@ export default function ReviewCard({
           <button type="button" className="review-action-link" onClick={onKeepAsIs}>
             Keep as is
           </button>
-          <button
-            type="button"
-            className={`review-action-link primary${status === 'exploring' ? ' active' : ''}`}
-            onClick={onToggleExplore}
-          >
-            {status === 'exploring' ? 'Close' : 'Explore'}
-          </button>
+          {canExplore && (
+            <button
+              type="button"
+              className={`review-action-link primary${status === 'exploring' ? ' active' : ''}`}
+              onClick={onToggleExplore}
+            >
+              {status === 'exploring' ? 'Close' : 'Explore'}
+            </button>
+          )}
         </div>
       )}
 
-      {status === 'exploring' && (
+      {canExplore && status === 'exploring' && (
         <div className="alternatives-list">
           {observation.alternatives.map((alternative) => {
             const isPreviewing = previewAlternativeId === alternative.id

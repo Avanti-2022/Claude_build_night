@@ -4,10 +4,17 @@ import BoundariesInput from '../inputs/BoundariesInput'
 import RunCompassButton from '../RunCompassButton'
 import ReviewCard from '../review/ReviewCard'
 import WeeklyBalance from '../balance/WeeklyBalance'
-import { OBSERVATIONS } from '../../mockData'
-import type { CalendarEvent, ReviewStatus } from '../../types'
+import type { CalendarEvent, ReviewResult, ReviewStatus } from '../../types'
 
 type CompassSidebarProps = {
+  priorities: string[]
+  onPrioritiesChange: (priorities: string[]) => void
+  wakeTime: string
+  sleepTime: string
+  onWakeTimeChange: (value: string) => void
+  onSleepTimeChange: (value: string) => void
+  review: ReviewResult
+  onRunCompass: () => void
   onPreview: (highlightIds: string[], ghostEvents: CalendarEvent[]) => void
   onCancelPreview: () => void
   onApply: (apply: (events: CalendarEvent[]) => CalendarEvent[]) => void
@@ -18,22 +25,35 @@ type ActivePreview = {
   alternativeId: string
 }
 
-function findAlternative(observationId: string, alternativeId: string) {
-  return OBSERVATIONS.find((observation) => observation.id === observationId)?.alternatives.find(
-    (alternative) => alternative.id === alternativeId,
-  )
-}
-
-export default function CompassSidebar({ onPreview, onCancelPreview, onApply }: CompassSidebarProps) {
+export default function CompassSidebar({
+  priorities,
+  onPrioritiesChange,
+  wakeTime,
+  sleepTime,
+  onWakeTimeChange,
+  onSleepTimeChange,
+  review,
+  onRunCompass,
+  onPreview,
+  onCancelPreview,
+  onApply,
+}: CompassSidebarProps) {
   const [hasRun, setHasRun] = useState(false)
-  const [cardStates, setCardStates] = useState<Record<string, ReviewStatus>>(() => {
-    const initial: Record<string, ReviewStatus> = {}
-    OBSERVATIONS.forEach((observation) => {
-      initial[observation.id] = 'idle'
-    })
-    return initial
-  })
+  const [cardStates, setCardStates] = useState<Record<string, ReviewStatus>>({})
   const [activePreview, setActivePreview] = useState<ActivePreview | null>(null)
+
+  const findAlternative = (observationId: string, alternativeId: string) =>
+    review.observations
+      .find((observation) => observation.id === observationId)
+      ?.alternatives.find((alternative) => alternative.id === alternativeId)
+
+  const handleRunCompass = () => {
+    setHasRun(true)
+    setCardStates({})
+    setActivePreview(null)
+    onCancelPreview()
+    onRunCompass()
+  }
 
   const handleBackToSetup = () => {
     setHasRun(false)
@@ -50,7 +70,7 @@ export default function CompassSidebar({ onPreview, onCancelPreview, onApply }: 
   }
 
   const handleToggleExplore = (observationId: string) => {
-    const isExploring = cardStates[observationId] === 'exploring'
+    const isExploring = (cardStates[observationId] ?? 'idle') === 'exploring'
     setCardStates((current) => ({ ...current, [observationId]: isExploring ? 'idle' : 'exploring' }))
     if (activePreview?.observationId === observationId) {
       setActivePreview(null)
@@ -89,9 +109,14 @@ export default function CompassSidebar({ onPreview, onCancelPreview, onApply }: 
 
       {!hasRun ? (
         <div className="compass-setup">
-          <BoundariesInput />
-          <PrioritiesInput />
-          <RunCompassButton onRun={() => setHasRun(true)} />
+          <BoundariesInput
+            wakeTime={wakeTime}
+            sleepTime={sleepTime}
+            onWakeTimeChange={onWakeTimeChange}
+            onSleepTimeChange={onSleepTimeChange}
+          />
+          <PrioritiesInput priorities={priorities} onChange={onPrioritiesChange} />
+          <RunCompassButton onRun={handleRunCompass} disabled={review.phase === 'loading'} />
         </div>
       ) : (
         <div className="compass-review">
@@ -99,23 +124,38 @@ export default function CompassSidebar({ onPreview, onCancelPreview, onApply }: 
             ← Back to setup
           </button>
           <h2 className="field-label">Observations</h2>
-          <div className="review-list">
-            {OBSERVATIONS.map((observation) => (
-              <ReviewCard
-                key={observation.id}
-                observation={observation}
-                status={cardStates[observation.id]}
-                previewAlternativeId={
-                  activePreview?.observationId === observation.id ? activePreview.alternativeId : null
-                }
-                onKeepAsIs={() => handleKeepAsIs(observation.id)}
-                onToggleExplore={() => handleToggleExplore(observation.id)}
-                onPreview={(alternativeId) => handlePreview(observation.id, alternativeId)}
-                onCancelPreview={handleCancelPreview}
-                onApply={(alternativeId) => handleApply(observation.id, alternativeId)}
-              />
-            ))}
-          </div>
+
+          {review.phase === 'loading' && <p className="review-status-message">Reviewing your week…</p>}
+
+          {review.phase === 'error' && (
+            <p className="review-status-message">
+              Compass couldn't complete this review. Try running it again.
+            </p>
+          )}
+
+          {review.phase === 'done' && review.observations.length === 0 && (
+            <p className="review-status-message">Nothing stood out this week — your plan looks steady.</p>
+          )}
+
+          {review.phase === 'done' && review.observations.length > 0 && (
+            <div className="review-list">
+              {review.observations.map((observation) => (
+                <ReviewCard
+                  key={observation.id}
+                  observation={observation}
+                  status={cardStates[observation.id] ?? 'idle'}
+                  previewAlternativeId={
+                    activePreview?.observationId === observation.id ? activePreview.alternativeId : null
+                  }
+                  onKeepAsIs={() => handleKeepAsIs(observation.id)}
+                  onToggleExplore={() => handleToggleExplore(observation.id)}
+                  onPreview={(alternativeId) => handlePreview(observation.id, alternativeId)}
+                  onCancelPreview={handleCancelPreview}
+                  onApply={(alternativeId) => handleApply(observation.id, alternativeId)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </aside>

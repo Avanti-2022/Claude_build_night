@@ -219,7 +219,19 @@ input {
   background: var(--accent-dark);
 }
 
+.run-compass-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Review */
+
+.review-status-message {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
 
 .back-link {
   align-self: flex-start;

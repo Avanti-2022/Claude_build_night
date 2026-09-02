@@ -24,3 +24,10 @@ export type Observation = {
 }
 
 export type ReviewStatus = 'idle' | 'kept' | 'exploring' | 'resolved'
+
+export type ReviewPhase = 'idle' | 'loading' | 'done' | 'error'
+
+export type ReviewResult = {
+  phase: ReviewPhase
+  observations: Observation[]
+}

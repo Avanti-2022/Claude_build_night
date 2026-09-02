@@ -1,12 +1,11 @@
-import { useState } from 'react'
+type PrioritiesInputProps = {
+  priorities: string[]
+  onChange: (priorities: string[]) => void
+}
 
-const defaultPriorities = ['Ship Compass MVP', 'Exercise 3x this week', 'Finish client proposal']
-
-export default function PrioritiesInput() {
-  const [priorities, setPriorities] = useState<string[]>(defaultPriorities)
-
+export default function PrioritiesInput({ priorities, onChange }: PrioritiesInputProps) {
   const updatePriority = (index: number, value: string) => {
-    setPriorities((current) => current.map((priority, i) => (i === index ? value : priority)))
+    onChange(priorities.map((priority, i) => (i === index ? value : priority)))
   }
 
   return (
